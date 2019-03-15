@@ -1,0 +1,74 @@
+---
+title: "Supplemental Assignment"
+author: "Ajinkya Sheth"
+date: "February 14, 2019"
+output: 
+  html_document:
+    smart: no
+    df_print: paged
+  pdf_document: default
+---
+
+
+##Regression was originally used by Francis Galton to study the relationship between parents and children. He wondered if he could predict a man’s height based on the height of his father? This is the question we will explore in this problem. You can obtain data similar to that used by Galton as follows:
+
+```{r include=FALSE} 
+library(UsingR)
+height <- get("father.son")
+```
+
+## a) (5 pt) Perform an exploratory analysis of the father and son heights. What does the relationship look like? Would a linear model be appropriate here?
+```{r}
+plot(height$fheight,height$sheight)
+```
+
+### Scatter plot between father's height and son's height shows that most data points are concentrated in the middle and linear model could be a rough generalization for the data
+
+## b) (5 pt) Use the lm function in R to fit a simple linear regression model to predict son’s height as a function of father’s height. Write down the model,
+## ysheight = β0 + β1 x fheight
+## filling in estimated coefficient values and interpret the coefficient estimates.
+
+```{r}
+mod <- lm(sheight ~ fheight, data = height)
+summary(mod)
+```
+### Interpretation: A 1 inch increase in father's height leads to 0.51 inch incease in Son's height
+
+
+## c) (5 pt) Find the 95% confidence intervals for the estimates. You may find the confint() command useful.
+```{r}
+confint(mod)
+```
+
+
+## d) (5 pt) Produce a visualization of the data and the least squares regression line.
+```{r}
+plot(mod$model)
+abline(mod)
+```
+
+
+
+## e) (5 pt) Produce a visualization of the residuals versus the fitted values. (You can inspect the elements of the linear model object in R using names()). Discuss what you see. Do you have any concerns about the linear model?
+```{r}
+names(mod)
+```
+
+```{r}
+plot(mod$fitted.values,mod$residuals)
+```
+### Most of the residuals seem to be concentrated between -5 and 5 units. No major concerns over linear model
+
+## f) (5 pt) Using the model you fit in part (b) predict the height was 5 males whose father are 50, 55, 70, 75, and 90 inches respectively. You may find the predict() function helpful.
+```{r}
+
+fh <- data.frame(fheight = c(50,55,79,75,90))
+res <- predict(lm(sheight ~ fheight, data = height), fh)
+res
+
+```
+
+
+## g) (5 pt) What do the estimates of the slope and height mean? Are the results statistically significant? Are they practically significant?
+### Estimate of slope denotes relationship between two variables within the experimental scope. It might be insignificant beyond the observed values
+### Estimate of height indicates the value of father's height when son's height is 0. This estimate doesn't have any statistical significance. 
